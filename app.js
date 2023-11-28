@@ -17,11 +17,29 @@ app.get('/courses', (req, res) => {
 );
 // Hämtar en kurs med id
 app.get('/courses/:id', (req, res) => {
-    console.log('GET /courses/:id');
-    const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('Kursen hittades inte.');
+    console.log('GET /courses/id');
+    const course = courses.find(c => c._id == req.params.id); 
+
+    if (!course) {
+        return res.status(404).send('Kursen hittades inte.');
+    }
+
     res.send(course);
 });
+
+app.delete('/courses/:id', (req, res) => {
+    console.log('GET /courses/id');
+    const course = courses.find(c => c._id == req.params.id); 
+
+    if (!course) {
+        return res.status(404).send('Kursen hittades inte.');
+    }
+    
+    const index = courses.indexOf(course);
+    courses.splice(index, 1);
+    
+});
+
 
 
 
