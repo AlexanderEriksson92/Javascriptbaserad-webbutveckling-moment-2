@@ -5,6 +5,8 @@ var app = express();
 var port = 3000;
 const courses = require('./courses.json');
 app.use(express.json());
+app.use(express.static('views'));
+
 
 app.listen(port, () => {
     console.log(`Servern körs på http://localhost:${port}`);
