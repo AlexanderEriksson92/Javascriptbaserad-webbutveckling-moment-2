@@ -13,7 +13,7 @@
             fetch('http://localhost:3000/courses')
                 .then(response => response.json())
                 .then(data => {
-                    let tableHTML = "<table><tr><th>ID</th><th>Kurs-ID</th><th>Kursnamn</th><th>Kursperiod</th></tr>";
+                    let tableHTML = "<table>  <tr><th>ID</th><th>Kurs-ID</th><th>Kursnamn</th><th>Kursperiod</th></tr>";
 
                     data.forEach(element => {
                         tableHTML += `<tr>
@@ -27,12 +27,13 @@
 
                     tableHTML += "</table>";
                     document.getElementById('courses').innerHTML = tableHTML;
+                    // När allt är färdigladdat körs denna funktion
                     addEventListeners();
                 });
+                // Funktion som lägger till eventlistener på alla knappar
             function addEventListeners() {
                 document.querySelectorAll('.delete-button').forEach(button => {
                     button.addEventListener('click', event => {
-                        console.log("jag är klickad på");
                         const id = event.target.getAttribute('data-id');
                         fetch(`http://localhost:3000/courses/${id}`, {
                             method: 'DELETE'

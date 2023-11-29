@@ -7,19 +7,17 @@ const courses = require('./courses.json');
 app.use(express.json());
 app.use(express.static('views'));
 
-
+// 
 app.listen(port, () => {
     console.log(`Servern körs på http://localhost:${port}`);
 });
 // Hämtar alla kurser
 app.get('/courses', (req, res) => {
-    console.log('GET /courses');
     res.json(courses);
 }
 );
 // Hämtar en kurs med id
 app.get('/courses/:id', (req, res) => {
-    console.log('GET /courses/id');
     const course = courses.find(c => c._id == req.params.id); 
 
     if (!course) {
@@ -29,6 +27,7 @@ app.get('/courses/:id', (req, res) => {
     res.send(course);
 });
 
+// Hämtar en kurs med id och raderar den sedan med splice
 app.delete('/courses/:id', (req, res) => {
     try {
         const course = courses.find(c => c._id == req.params.id); 
@@ -39,9 +38,9 @@ app.delete('/courses/:id', (req, res) => {
         
         const index = courses.indexOf(course);
         courses.splice(index, 1);
-        setTimeout(() => {
+        
             res.send(`Kursen med id: ${req.params.id} är borttagen`);
-        }, 1000);
+       
     }
     catch (error) {
         res.status(500).send(error);
