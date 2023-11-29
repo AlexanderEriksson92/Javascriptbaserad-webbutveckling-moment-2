@@ -1,22 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <div id="courses">
         <script>
-             fetch('http://localhost:3000/courses')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                data.forEach(element => {
-                    document.getElementById('courses').innerHTML += `<h1>${element._id}</h1>`;
+            fetch('http://localhost:3000/courses')
+                .then(response => response.json())
+                .then(data => {
+                    let tableHTML = "<table><tr><th>ID</th><th>Kurs-ID</th><th>Kursnamn</th><th>Kursperiod</th></tr>";
+
+                    data.forEach(element => {
+                        tableHTML += `<tr>
+                    <td>${element._id}</td>
+                    <td>${element.courseId}</td>
+                    <td>${element.courseName}</td>
+                    <td>${element.coursePeriod}</td>
+                    <td><button class="delete-button" data-id="${element._id}">Ta bort</button></td>
+                  </tr>`;
+                    });
+
+                    tableHTML += "</table>";
+                    document.getElementById('courses').innerHTML = tableHTML;
+                    addEventListeners();
                 });
-            });
+            function addEventListeners() {
+                document.querySelectorAll('.delete-button').forEach(button => {
+                    button.addEventListener('click', event => {
+                        console.log("jag är klickad på");
+                        const id = event.target.getAttribute('data-id');
+                        fetch(`http://localhost:3000/courses/${id}`, {
+                            method: 'DELETE'
+                        })
+                            .then(response => response.text())
+                            .then(data => {
+                                window.location.reload();
+                            });
+                    });
+                });
+            }
         </script>
     </div>
 </body>
+
 </html>
