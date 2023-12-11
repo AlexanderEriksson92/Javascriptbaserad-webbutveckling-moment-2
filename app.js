@@ -47,11 +47,17 @@ app.get('/courses', async (req, res) => {
 );
 // Hämtar en kurs med id
 app.get('/courses/:id', async (req, res) => {
-    const course = await Course.findById(req.params.id);
+    
     try {
+        const courseId = parseInt(req.params.id);
+        if (isNaN(courseId)) {
+            return res.status(400).send('Ogiltigt ID format.');
+        }
+        const course = await Course.findOne({ id: courseId });
         if (!course) {
             return res.status(404).send('Kursen hittades inte.');
         }
+        res.json(course);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -87,17 +93,20 @@ app.post('/courses', async (req, res) => {
         res.status(500).send(error);
     }
 });
-// Hämtar en kurs med id och raderar den sedan med splice
+// Hämtar en kurs med id och raderar den sedan 
 
 app.delete('/courses/:id', async (req, res) => {
     try {
-        const course = await Course.findById(req.params.id);
-
+        const courseId = parseInt(req.params.id);
+        if (isNaN(courseId)) {
+            return res.status(400).send('Ogiltigt ID format.');
+        }
+        // Ändrade till findOneAndDelete istället för deleteOne 
+        const course = await Course.findOneAndDelete({ id: courseId });
         if (!course) {
             return res.status(404).send('Kursen hittades inte.');
         }
-
-        await course.remove();
+      
         res.send(`Kursen med id: ${req.params.id} är borttagen`);
     } catch (error) {
         res.status(500).send(error.message);
