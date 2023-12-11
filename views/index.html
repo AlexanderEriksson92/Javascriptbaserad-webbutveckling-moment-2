@@ -13,14 +13,14 @@
             fetch('http://localhost:3000/courses')
                 .then(response => response.json())
                 .then(data => {
-                    let tableHTML = "<table>  <tr><th>ID</th><th>Kurs-ID</th><th>Kursnamn</th><th>Kursperiod</th></tr>";
-
+                    let tableHTML = "<table>  <tr><th>Kurskod</th><th>Kursnamn</th><th>Kursplan</th><th>Progression</th><th>Termin</th></tr>";
                     data.forEach(element => {
                         tableHTML += `<tr>
-                    <td>${element._id}</td>
                     <td>${element.courseId}</td>
-                    <td>${element.courseName}</td>
-                    <td>${element.coursePeriod}</td>
+                    <td>${element.name}</td>
+                     <td>${element.syllabus}</td>
+                    <td>${element.progression}</td>
+                    <td>${element.term}</td>
                     <td><button class="delete-button" data-id="${element._id}">Ta bort</button></td>
                   </tr>`;
                     });
@@ -30,7 +30,7 @@
                     // När allt är färdigladdat körs denna funktion
                     addEventListeners();
                 });
-                // Funktion som lägger till eventlistener på alla knappar
+            // Funktion som lägger till eventlistener på alla knappar
             function addEventListeners() {
                 document.querySelectorAll('.delete-button').forEach(button => {
                     button.addEventListener('click', event => {
@@ -44,8 +44,56 @@
                             });
                     });
                 });
+
+                document.getElementById("submit").addEventListener("click", function () {
+                    event.preventDefault();
+                    let courseId = document.getElementById("courseId").value;
+                    let name = document.getElementById("name").value;
+                    let syllabus = document.getElementById("syllabus").value;
+                    let progression = document.getElementById("progression").value;
+                    let term = document.getElementById("term").value;
+
+                    fetch('http://localhost:3000/courses', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            courseId: courseId,
+                            name: name,
+                            syllabus: syllabus,
+                            progression: progression,
+                            term: term
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            window.location.reload();
+                        })
+                        .catch(error => {
+                            console.log('Error: ', error);
+                        });
+
+                });
             }
+
+
         </script>
+    </div>
+    <div id="addCourse">
+        <form action="http://localhost:3000/courses" method="POST">
+            <label for="courseId">Kurskod</label>
+            <input type="text" name="courseId" id="courseId">
+            <label for="name">Kursnamn</label>
+            <input type="text" name="name" id="name">
+            <label for="syllabus">Kursplan</label>
+            <input type="text" name="syllabus" id="syllabus">
+            <label for="progression">Progression</label>
+            <input type="text" name="progression" id="progression">
+            <label for="term">Termin</label>
+            <input type="text" name="term" id="term">
+            <input type="submit" value="Lägg till" id="submit">
+        </form>
     </div>
 </body>
 
