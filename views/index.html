@@ -21,7 +21,7 @@
                      <td>${element.syllabus}</td>
                     <td>${element.progression}</td>
                     <td>${element.term}</td>
-                    <td><button class="delete-button" data-id="${element._id}">Ta bort</button></td>
+                    <td><button class="delete-button" data-id="${element.id}">Ta bort</button></td>
                   </tr>`;
                     });
 
@@ -73,10 +73,8 @@
                         .catch(error => {
                             console.log('Error: ', error);
                         });
-
                 });
             }
-
 
         </script>
     </div>
